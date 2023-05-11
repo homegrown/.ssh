@@ -1,51 +1,39 @@
 #!/bin/bash
+repo="https://raw.githubusercontent.com/homegrown/.ssh/trunk/keys"
+
 clear
-username=$USER
+echo "Which staff member keys do you want to install?"
+echo ""
+echo "1) Andrew Kennett"
+echo "2) Paul Stuffins"
+read staff
 
-echo "Which SSH keys are you wanting to install to this server?";
-echo "";
-echo "1) Desktop key";
-echo "2) Laptop key";
-echo "3) Desktop & laptop keys";
-echo "";
-read number
+clear
+echo "Which device keys do you want to install?"
+echo ""
+echo "1) Desktop key"
+echo "2) Laptop key"
+read device
 
-if [ "$number" == '1' ]; then
-    echo "Downloading keys"
-    wget -b https://raw.githubusercontent.com/homegrown/.ssh/trunk/keys/paulstuffins/desktop.pub
-    sleep 3
-    echo "Installing keys"
-    cat desktop.pub >> ~/.ssh/authorized_keys
-    sleep 3
-    rm -f wget-log
-    rm -f desktop.pub
-    echo "Desktop keys have been added to the authorised keys file.";
-fi
+case "$staff" in
+    '1') staff=andrewkennett ;;
+    '2') staff=paulstuffins  ;;
+esac
 
-if [ "$number" == '2' ]; then
-    echo "Downloading keys"
-    wget -b https://raw.githubusercontent.com/homegrown/.ssh/trunk/keys/paulstuffins/laptop.pub
-    sleep 3
-    echo "Installing keys"
-    cat laptop.pub >> ~/.ssh/authorized_keys
-    sleep 3
-    rm -f wget-log
-    rm -f laptop.pub
-    echo "Laptop keys have been added to the authorised keys file.";
-fi
+case "$device" in
+    '1') device=desktop.pub ;;
+    '2') device=laptop.pub  ;;
+esac
 
-if [ "$number" == '3' ]; then
-    echo "Downloading keys"
-    wget -b https://raw.githubusercontent.com/homegrown/.ssh/trunk/keys/paulstuffins/desktop.pub
-    wget -b https://raw.githubusercontent.com/homegrown/.ssh/trunk/keys/paulstuffins/laptop.pub
+clear
+if wget -q $repo/$staff/$device; then
+    echo "Downloading specified key."
     sleep 3
-    echo "Installing keys"
-    cat desktop.pub >> ~/.ssh/authorized_keys
-    cat laptop.pub >> ~/.ssh/authorized_keys
+    cat $device >> ~/.ssh/authorized_keys
+    echo "Installing specified key."
     sleep 3
-    rm -f wget-log
-    rm -f wget-log.1
-    rm -f desktop.pub
-    rm -f laptop.pub
-    echo "Desktop & laptop keys have been added to the authorised keys file.";
+    rm -f $device
+    echo "Specified key has been added to the authorised keys file."
+else
+    echo "Failed to download specified key."
 fi
