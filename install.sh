@@ -44,6 +44,7 @@ if [ "$number" == '3' ]; then
     cat laptop.pub >> ~/.ssh/authorized_keys
     sleep 3
     rm -f wget-log
+    rm -f wget-log.1
     rm -f desktop.pub
     rm -f laptop.pub
     echo "Desktop & laptop keys have been added to the authorised keys file.";
