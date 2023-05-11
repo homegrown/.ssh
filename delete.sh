@@ -1,33 +1,18 @@
 #!/bin/bash
+
 clear
-username=$USER
+echo "Which staff keys do you want to delete?"
+echo ""
+echo "1) Andrew Kennett"
+echo "2) Paul Stuffins"
+read staff
 
-echo "Which SSH keys do you want to delete from this server?";
-echo "";
-echo "1) Desktop key";
-echo "2) Laptop key";
-echo "3) Desktop & laptop keys";
-echo "";
-read number
+case "$staff" in
+    '1') staff=andrew.kennett@homegrowntechnology.co.uk ;;
+    '2') staff=paul.stuffins@homegrowntechnology.co.uk  ;;
+esac
 
-if [ "$number" == '1' ]; then
-    echo "Deleting keys"
-    sed -i '/Desktop/d' ~/.ssh/authorized_keys
-    sleep 3
-    echo "Desktop keys have been deleted from the authorised keys file.";
-fi
-
-if [ "$number" == '2' ]; then
-    echo "Deleting keys"
-    sed -i '/Laptop/d' ~/.ssh/authorized_keys
-    sleep 3
-    echo "Laptop keys have been deleted from the authorised keys file.";
-fi
-
-if [ "$number" == '3' ]; then
-    echo "Deleting keys"
-    sed -i '/Desktop/d' ~/.ssh/authorized_keys
-    sed -i '/Laptop/d' ~/.ssh/authorized_keys
-    sleep 3
-    echo "Desktop & laptop keys have been deleted from the authorised keys file.";
-fi
+echo "Deleting specified keys."
+sleep 3
+sed -i /$staff/d ~/.ssh/authorized_keys
+echo "Specified keys have been deleted from the authorised keys file."
